@@ -1,0 +1,14 @@
+# mysqld-exporter - export mysqld information daemon
+#
+
+description	"mysqld-exporter"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+
+script
+    . /etc/default/mysqld-exporter
+    /usr/bin/mysqld_exporter -web.listen-address :$PORT
+end script

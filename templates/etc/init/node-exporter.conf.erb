@@ -1,0 +1,14 @@
+# node-exporter - export node information daemon
+#
+
+description	"node-exporter"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+
+script
+    . /etc/default/node-exporter
+    /usr/bin/node_exporter -web.listen-address :<%= @exporter_port %>
+end script
