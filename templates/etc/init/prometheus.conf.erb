@@ -1,0 +1,15 @@
+# Prometheus Service
+
+description     "Prometheus"
+author          "Kaija Chang <kaija.chang@gmail.com>"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+
+umask 007
+
+script
+	/usr/bin/prometheus -config.file=<%= @config_file %> -alertmanager.url=<%= @alertmanager_url %> <% if @prometheus_external_url %>-web.external-rul=<%= @prometheus_external_url %> <% end %> -web.route-prefix=<%= @prometheus_web_prefix %>
+end script

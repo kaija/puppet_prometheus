@@ -1,0 +1,13 @@
+# pushgayeway
+#
+
+description	"pushgateway"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+
+script
+    /usr/bin/pushgateway -web.listen-address :<%= @pushgateway_port %>
+end script

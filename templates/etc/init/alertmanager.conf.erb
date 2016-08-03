@@ -1,0 +1,14 @@
+# pushgayeway
+#
+
+description	"alertmanager"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+
+script
+    . /etc/default/alertmanager
+    /usr/bin/alertmanager -web.listen-address :<%= @alertmanager_port %> -config.file /etc/alertmanager/alertmanager.yml -web.external-url=<%= @alertmanager_web_prefix %>
+end script

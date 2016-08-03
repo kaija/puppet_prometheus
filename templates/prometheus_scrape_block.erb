@@ -1,0 +1,8 @@
+
+  - job_name: '<%= @name %>'
+
+    scrape_interval: <%= @scrape_interval %>s
+
+    static_configs:
+      - targets: ['<%= @targets.join(',') %>']
+
