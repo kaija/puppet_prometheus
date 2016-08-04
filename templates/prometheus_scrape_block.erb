@@ -7,6 +7,9 @@
 
     static_configs:
       - targets: ['<%= @targets.join(',') %>']
-        labels:
-            alias: test
+    relabel_configs:
+      - source_labels: [__address__]
+        action: replace
+        regex: (.*)
+        target_label: alias
 
