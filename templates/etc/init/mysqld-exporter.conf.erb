@@ -10,5 +10,5 @@ respawn
 
 script
     . /etc/default/mysqld-exporter
-    /usr/bin/mysqld_exporter -web.listen-address :$PORT
+    /usr/bin/mysqld_exporter -web.listen-address :$PORT $OPTIONS
 end script

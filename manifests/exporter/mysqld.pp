@@ -33,7 +33,7 @@ class prometheus::exporter::mysqld (
             notify      => Exec['mysqld-exporter-upstart-reload'],
             content     => template('prometheus/etc/init/mysqld-exporter.conf.erb');
 
-        '/etc/default/mysqld-exporter.conf':
+        '/etc/default/mysqld-exporter':
             ensure      => 'file',
             owner       => root,
             group       => root,

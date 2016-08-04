@@ -1,8 +1,12 @@
 
   - job_name: '<%= @name %>'
 
-    scrape_interval: <%= @scrape_interval %>s
+    scrape_interval: <%= @interval %>s
+
+    metrics_path: <%= @path %>
 
     static_configs:
       - targets: ['<%= @targets.join(',') %>']
+        labels:
+            alias: test
 

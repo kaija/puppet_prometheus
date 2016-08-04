@@ -3,8 +3,8 @@
 #
 define prometheus::scrape(
     $port               =  undef,
-    $path               =  undef,
-    $scrape_interval    =  '60',
+    $path               =  '/metrics',
+    $interval           =  '60',
     $ips                =  undef,
     $config_file        =  '/etc/prometheus/prometheus.yml',
 ) {

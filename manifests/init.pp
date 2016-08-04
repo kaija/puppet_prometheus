@@ -9,6 +9,7 @@ class prometheus(
     $alertmanager_url           = 'http://localhost:9093/alert/',
     $prometheus_external_url    = undef,
     $prometheus_web_prefix      = '/prom',
+    $prometheus_storage_path    = '/data/prometheus',
 )inherits prometheus::params {
     validate_string($config)
 
@@ -63,8 +64,9 @@ class prometheus(
             order       =>  '30',
             content     =>  template('prometheus/prometheus_scrape_header.erb'),
         }
-        prometheus::scrape{"prometheus_scrape_self":
+        prometheus::scrape{"prometheus":
             port            => '9090',
+            path            => "${prometheus_web_prefix}/metrics",
             config_file     => $config_file,
             ips             => ['127.0.0.1']
         }
