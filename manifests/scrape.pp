@@ -8,13 +8,13 @@ define prometheus::scrape(
     $ips                =  undef,
     $config_file        =  '/etc/prometheus/prometheus.yml',
 ) {
-    if $label and $port {
+    if $port {
         fail('please define label and port')
     }
     $targets = ip2target($ips, $port)
     concat::fragment { "prometheus-scrape-${name}":
-        target      =>  $config_file,
-        order       =>  '40',
-        content     =>  template('prometheus/prometheus_scrape_block.erb'),
+        target  =>  $config_file,
+        order   =>  '40',
+        content =>  template('prometheus/prometheus_scrape_block.erb'),
     }
 }

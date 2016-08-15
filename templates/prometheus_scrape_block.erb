@@ -6,10 +6,14 @@
     metrics_path: <%= @path %>
 
     static_configs:
-      - targets: ['<%= @targets.join(',') %>']
+      - targets:
+<% @targets.each do |host| -%>
+        - '<%= "#{host}" %>'
+<% end -%>
     relabel_configs:
       - source_labels: [__address__]
         action: replace
-        regex: (.*)
+        regex: (.+)(?::\d+)
         target_label: alias
+        replacement: $1
 

@@ -10,24 +10,27 @@ class prometheus(
     $prometheus_external_url    = undef,
     $prometheus_web_prefix      = '/prom',
     $prometheus_storage_path    = '/data/prometheus',
+    $scrape_interval            = $prometheus::params::scrape_interval,
+    $evaluation_interval        = $prometheus::params::evaluation_interval,
 )inherits prometheus::params {
+
     validate_string($config)
 
     if $enable_alertmanager {
-        prometheus::alertmanager{"alertmanager":
+        prometheus::alertmanager{'alertmanager':
             port => '9093'
         }
     }
     if $enable_pushgateway {
-        prometheus::pushgateway{"pushgateway":
+        prometheus::pushgateway{'pushgateway':
             port => '9091'
         }
     }
 
     $config_file = $config
-	package{'prometheus':
-		ensure	=> installed,
-	}
+    package{'prometheus':
+        ensure  => installed,
+    }
 
     exec {
         'prometheus-upstart-reload':
@@ -46,39 +49,42 @@ class prometheus(
             force       => true,
             notify      => Exec['prometheus-upstart-reload'],
             content     => template('prometheus/etc/init/prometheus.conf.erb');
+
+        '/etc/prometheus/rules':
+            ensure      => 'directory';
     }
 
     if $custom_config == false {
         #ensure prometheus config exist
         concat {$config_file:
-            owner   =>  'root',
-            group   =>  'root',
+            owner => 'root',
+            group => 'root',
         }
         prometheus::global{'prometheus_global':
             scrape_interval     => $scrape_interval,
             evaluation_interval => $evaluation_interval,
             config_file         => $config_file,
         }
-        concat::fragment { "prometheus-scrape-header":
-            target      =>  $config_file,
-            order       =>  '30',
-            content     =>  template('prometheus/prometheus_scrape_header.erb'),
+        concat::fragment { 'prometheus-scrape-header':
+            target  =>  $config_file,
+            order   =>  '30',
+            content =>  template('prometheus/prometheus_scrape_header.erb'),
         }
-        prometheus::scrape{"prometheus":
-            port            => '9090',
-            path            => "${prometheus_web_prefix}/metrics",
-            config_file     => $config_file,
-            ips             => ['127.0.0.1']
+        prometheus::scrape{'prometheus':
+            port        => '9090',
+            path        => "${prometheus_web_prefix}/metrics",
+            config_file => $config_file,
+            ips         => ['127.0.0.1']
         }
         service{'prometheus':
-            ensure	  => running,
-            enable	  => true,
+            ensure    => running,
+            enable    => true,
             subscribe => Concat[$config],
         }
     }else{
         service{'prometheus':
-            ensure	  => running,
-            enable	  => true,
+            ensure => running,
+            enable => true,
         }
     }
     #Example
